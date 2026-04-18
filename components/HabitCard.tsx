@@ -1,5 +1,6 @@
-import { Habit, Category, AppContext } from '@/app/_layout';
+import { AppContext, Category, Habit } from '@/app/_layout';
 import InfoTag from '@/components/ui/info-tag';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useContext } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -35,7 +36,13 @@ export default function HabitCard({ habit }: Props) {
       ]}
     >
       <View style={styles.header}>
-        <Text style={styles.icon}>{category?.icon ?? '📌'}</Text>
+        <View style={[styles.iconBox, { backgroundColor: (category?.color ?? '#94A3B8') + '20' }]}>
+          <MaterialCommunityIcons
+            name={(category?.icon as any) ?? 'star'}
+            size={22}
+            color={category?.color ?? '#94A3B8'}
+          />
+        </View>
         <View style={styles.headerText}>
           <Text style={styles.name}>{habit.name}</Text>
           {habit.notes ? (
@@ -68,9 +75,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  icon: {
-    fontSize: 24,
-    marginRight: 10,
+  iconBox: {
+    alignItems: 'center',
+    borderRadius: 10,
+    height: 40,
+    justifyContent: 'center',
+    marginRight: 12,
+    width: 40,
   },
   headerText: {
     flex: 1,

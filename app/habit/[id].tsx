@@ -3,6 +3,7 @@ import PrimaryButton from '@/components/ui/primary-button';
 import ScreenHeader from '@/components/ui/screen-header';
 import { db } from '@/db/client';
 import { habits as habitsTable } from '@/db/schema';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { eq } from 'drizzle-orm';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useContext } from 'react';
@@ -34,7 +35,16 @@ export default function HabitDetail() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScreenHeader title={habit.name} subtitle={category ? `${category.icon} ${category.name}` : 'Habit details'} />
+      <View style={styles.headerRow}>
+        <View style={[styles.iconBox, { backgroundColor: (category?.color ?? '#94A3B8') + '20' }]}>
+          <MaterialCommunityIcons
+            name={(category?.icon as any) ?? 'star'}
+            size={28}
+            color={category?.color ?? '#94A3B8'}
+          />
+        </View>
+        <ScreenHeader title={habit.name} subtitle={category?.name ?? 'Habit details'} />
+      </View>
 
       <View style={styles.tags}>
         <InfoTag label="Category" value={category?.name ?? 'None'} />
@@ -76,6 +86,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
     paddingHorizontal: 18,
     paddingTop: 10,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconBox: {
+    alignItems: 'center',
+    borderRadius: 12,
+    height: 48,
+    justifyContent: 'center',
+    width: 48,
   },
   tags: {
     flexDirection: 'row',

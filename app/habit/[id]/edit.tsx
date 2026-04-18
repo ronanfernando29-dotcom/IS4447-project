@@ -3,6 +3,7 @@ import PrimaryButton from '@/components/ui/primary-button';
 import ScreenHeader from '@/components/ui/screen-header';
 import { db } from '@/db/client';
 import { habits as habitsTable } from '@/db/schema';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { eq } from 'drizzle-orm';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
@@ -98,13 +99,20 @@ export default function EditHabit() {
                   selectedCategoryId === cat.id && { backgroundColor: cat.color },
                 ]}
               >
-                <Text style={[
-                  styles.categoryText,
-                  { color: cat.color },
-                  selectedCategoryId === cat.id && { color: '#FFFFFF' },
-                ]}>
-                  {cat.icon} {cat.name}
-                </Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                    <MaterialCommunityIcons
+                      name={(cat.icon as any)}
+                      size={18}
+                      color={selectedCategoryId === cat.id ? '#FFFFFF' : cat.color}
+                    />
+                    <Text style={[
+                      styles.categoryText,
+                      { color: cat.color },
+                      selectedCategoryId === cat.id && { color: '#FFFFFF' },
+                    ]}>
+                      {cat.name}
+                    </Text>
+                  </View>
               </Pressable>
             ))}
           </View>

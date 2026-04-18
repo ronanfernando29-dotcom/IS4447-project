@@ -1,24 +1,24 @@
 import { db } from './client';
-import { users, categories, habits, habitLogs, targets } from './schema';
+import { categories, habitLogs, habits, targets, users } from './schema';
 
 export async function seedDatabase() {
   const existingUsers = await db.select().from(users);
   if (existingUsers.length > 0) return;
 
-  // Create a demo user (password is "password" - simple hash for demo)
+  // demo user for testing
   await db.insert(users).values([
     { username: 'demo', passwordHash: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', createdAt: new Date().toISOString() },
   ]);
 
-  // Create categories
+  // mockcategories
   await db.insert(categories).values([
-    { userId: 1, name: 'Health', color: '#10B981', icon: '💪' },
-    { userId: 1, name: 'Fitness', color: '#3B82F6', icon: '🏃' },
-    { userId: 1, name: 'Productivity', color: '#F59E0B', icon: '📚' },
-    { userId: 1, name: 'Wellness', color: '#8B5CF6', icon: '🧘' },
+    { userId: 1, name: 'Health', color: '#10B981', icon: 'heart-pulse' },
+    { userId: 1, name: 'Fitness', color: '#3B82F6', icon: 'run' },
+    { userId: 1, name: 'Productivity', color: '#F59E0B', icon: 'book-open-variant' },
+    { userId: 1, name: 'Wellness', color: '#8B5CF6', icon: 'meditation' },
   ]);
 
-  // Create habits
+  // mock habits
   await db.insert(habits).values([
     { userId: 1, categoryId: 1, name: 'Drink Water', frequency: 'daily', goalCount: 8, notes: '8 glasses per day', createdAt: new Date().toISOString() },
     { userId: 1, categoryId: 2, name: 'Go Running', frequency: 'daily', goalCount: 1, notes: 'At least 30 minutes', createdAt: new Date().toISOString() },

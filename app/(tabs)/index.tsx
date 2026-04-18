@@ -14,7 +14,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Habit, Category, AppContext } from '../_layout';
+import { AppContext, Category, Habit } from '../_layout';
 
 export default function IndexScreen() {
   const router = useRouter();
@@ -63,6 +63,13 @@ export default function IndexScreen() {
         label="Add Habit"
         onPress={() => router.push({ pathname: '../add' })}
       />
+      <View style={{ marginTop: 10 }}>
+        <PrimaryButton
+          label="Manage Categories"
+          variant="secondary"
+          onPress={() => router.push({ pathname: '../categories' })}
+        />
+      </View>
 
       <TextInput
         value={searchQuery}
