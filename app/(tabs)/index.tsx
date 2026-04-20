@@ -1,3 +1,31 @@
+/**
+ * HabitTracker – index.tsx
+ * Author: Ronan Fernando (2025/2026)
+ *
+ * What's original (own work):
+ * Adapting the student list screen from IS4447 lab workspace into a habits list.
+ * Converting the student list screen to a habits list,
+ * Search and category filter logic for habits.
+ * Layout and styling decisions for the main habits screen.
+ *
+ * Adapted from:
+ * IS4447 Lab workspace - original student list screen structure with search
+ * and filter functionality, adapted for habits.
+ * PrimaryButton, ScreenHeader, HabitCard components.
+ * Drizzle ORM with SQLite for data persistence.
+ * expo-drizzle-studio-plugin for database debugging.
+ *
+ * AI assistance (Claude, Anthropic, 2026):
+ * Assisted with converting the student list screen to a habits list,
+ * updating context from StudentContext to AppContext, and adding
+ * category-based filtering alongside existing text search.
+ * 
+ *
+ * Link to AI conversation: [paste link]
+ *
+ * I understand and can explain all code in this file.
+ */
+
 import HabitCard from '@/components/HabitCard';
 import PrimaryButton from '@/components/ui/primary-button';
 import ScreenHeader from '@/components/ui/screen-header';

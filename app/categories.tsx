@@ -1,3 +1,30 @@
+/**
+ * HabitTracker – categories.tsx
+ * Author: Ronan Fernando (2025/2026)
+ *
+ * What's original (own work):
+ * Designing the category management screen with create, edit, and delete.
+ * Colour picker and icon selector UI for category customisation.
+ * Layout and styling decisions for category cards and form.
+ * chose specific MaterialCommunityIcons from icons.expo.fyi,
+ * adapted styling to match app theme.
+ *
+ * Adapted from:
+ * IS4447 Lab workspace - base project structure, FormField, PrimaryButton,
+ * ScreenHeader components, Drizzle ORM with SQLite.
+ * icons.expo.fyi (2026) MaterialCommunityIcons for icon selection.
+ *
+ * AI assistance (Claude, Anthropic, 2026):
+ * Assisted with building the categories screen structure including
+ * colour picker grid, icon selector grid, edit/create form toggle,
+ * delete confirmation alert, and Drizzle ORM queries for CRUD operations.
+ * 
+ *
+ * Link to AI conversation: [paste link]
+ *
+ * I understand and can explain all code in this file.
+ */
+
 import FormField from '@/components/ui/form-field';
 import PrimaryButton from '@/components/ui/primary-button';
 import ScreenHeader from '@/components/ui/screen-header';
@@ -8,12 +35,12 @@ import { eq } from 'drizzle-orm';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import {
-    Alert,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppContext, Category } from './_layout';
