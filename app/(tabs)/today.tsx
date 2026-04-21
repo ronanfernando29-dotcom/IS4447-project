@@ -27,6 +27,7 @@
  * I understand and can explain all code in this file.
  */
 
+import QuoteCard from '@/components/QuoteCard';
 import ScreenHeader from '@/components/ui/screen-header';
 import { useTheme } from '@/context/ThemeContext';
 import { db } from '@/db/client';
@@ -129,6 +130,7 @@ export default function TodayScreen() {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <ScreenHeader title="Today" subtitle={today} />
+        <QuoteCard />
 
         <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Text style={[styles.summaryText, { color: colors.text }]}>

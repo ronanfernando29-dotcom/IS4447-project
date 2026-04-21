@@ -130,13 +130,6 @@ export default function IndexScreen() {
           onPress={() => router.push({ pathname: '../categories' })}
         />
       </View>
-      <View style={{ marginTop: 10 }}>
-        <PrimaryButton
-          label="Export Data"
-          variant="secondary"
-          onPress={() => router.push({ pathname: '../export' })}
-        />
-      </View>
 
       <TextInput
         value={searchQuery}
