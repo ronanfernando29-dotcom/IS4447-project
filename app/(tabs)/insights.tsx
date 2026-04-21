@@ -6,22 +6,24 @@
  * Implementing weekly navigation with date arrows adapted from FYP (EatBud).
  * Dynamic colour logic for progress feedback based on completion rate.
  * Layout and styling decisions for chart cards.
+ * Implementing dark mode colours using ThemeContext.
  *
  * Adapted from:
- * IS4447 Lab workspace - base project structure, Drizzle ORM with SQLite.
+ * IS4447 Lab workspace - base project structure, Drizzle ORM with SQLite — https://orm.drizzle.team/docs/select
  * Weekly navigation pattern adapted from own FYP project (EatBud WeeklyReportScreen).
- * react-native-progress for progress bars.
- * react-native-pie-chart for donut charts.
- * react-native-chart-kit for bar charts.
- * icons.expo.fyi (2026) MaterialCommunityIcons.
+ * react-native-progress for progress bars — https://www.npmjs.com/package/react-native-progress
+ * react-native-pie-chart for donut charts — https://www.npmjs.com/package/react-native-pie-chart
+ * react-native-chart-kit for bar charts — https://www.npmjs.com/package/react-native-chart-kit
+ * icons.expo.fyi (2026) MaterialCommunityIcons — https://icons.expo.fyi
+ * React Context API for theme — https://react.dev/reference/react/createContext
  *
  * AI assistance (Claude, Anthropic, 2026):
  * Assisted with building the insights screen structure including bar chart
  * configuration, pie chart data formatting, streak calculation logic,
  * and Drizzle ORM queries for filtering habit logs by date range.
- * Modifications: adapted colour scheme and feedback messages to match
- * patterns from own FYP. Adjusted chart sizing for mobile layout.
- * Handling typrscript issues with react-native-pie-chart by adding @ts-ignore and adjusting data format
+ * Handling TypeScript issues with react-native-pie-chart by adding @ts-ignore
+ * and adjusting data format.
+ * Dark mode integration with ThemeContext implemented by myself.
  *
  * 
  *
@@ -29,6 +31,7 @@
  */
 
 import ScreenHeader from '@/components/ui/screen-header';
+import { useTheme } from '@/context/ThemeContext';
 import { db } from '@/db/client';
 import { habitLogs as habitLogsTable } from '@/db/schema';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -87,6 +90,7 @@ export default function InsightsScreen() {
   const context = useContext(AppContext);
   const [weekAnchorDate, setWeekAnchorDate] = useState(() => new Date());
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const { colors } = useTheme();
 
   const weekFrom = useMemo(() => startOfWeek(weekAnchorDate), [weekAnchorDate]);
   const weekTo = useMemo(() => endOfWeek(weekAnchorDate), [weekAnchorDate]);
@@ -207,7 +211,7 @@ export default function InsightsScreen() {
     : '#EF4444';
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <ScreenHeader title="Insights" subtitle="Your habit analytics" />
 
@@ -219,7 +223,7 @@ export default function InsightsScreen() {
             onPress={() => setWeekAnchorDate((d) => addDays(d, -7))}
             hitSlop={10}
           >
-            <MaterialCommunityIcons name="chevron-left" size={28} color="#111827" />
+            <MaterialCommunityIcons name="chevron-left" size={28} color={colors.text} />
           </Pressable>
 
           <Pressable
@@ -228,7 +232,7 @@ export default function InsightsScreen() {
             onPress={() => setWeekAnchorDate(new Date())}
             hitSlop={10}
           >
-            <Text style={styles.weekText}>
+            <Text style={[styles.weekText, { color: colors.text }]}>
               {formatDayLabel(weekFrom)} – {formatDayLabel(weekTo)}
             </Text>
           </Pressable>
@@ -239,7 +243,7 @@ export default function InsightsScreen() {
             onPress={() => setWeekAnchorDate((d) => addDays(d, 7))}
             hitSlop={10}
           >
-            <MaterialCommunityIcons name="chevron-right" size={28} color="#111827" />
+            <MaterialCommunityIcons name="chevron-right" size={28} color={colors.text} />
           </Pressable>
         </View>
 
@@ -255,8 +259,8 @@ export default function InsightsScreen() {
         </View>
 
         {/* Overall Completion Donut */}
-        <Text style={styles.sectionTitle}>Weekly Completion</Text>
-        <View style={styles.chartCard}>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Weekly Completion</Text>
+        <View style={[styles.chartCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <View style={styles.pieWrapper}>
             {/* @ts-ignore */}
             <PieChart
@@ -282,7 +286,7 @@ export default function InsightsScreen() {
             </View>
           </View>
 
-          <Text style={styles.completionText}>
+          <Text style={[styles.completionText, { color: colors.text }]}>
             {totalCompleted} of {totalPossible} habits completed
           </Text>
 
@@ -305,7 +309,8 @@ export default function InsightsScreen() {
 
         {/* Daily Bar Chart */}
         <Text style={styles.sectionTitle}>Daily Completions</Text>
-        <View style={styles.chartCard}>
+        <View style={[styles.chartCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          {/* @ts-ignore */}
           <BarChart
             data={{
               labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -316,13 +321,14 @@ export default function InsightsScreen() {
             fromZero
             yAxisLabel=""
             yAxisSuffix=""
+            formatYLabel={(value: any) => Math.round(Number(value)).toString()}
             chartConfig={{
-              backgroundColor: '#FFFFFF',
-              backgroundGradientFrom: '#FFFFFF',
-              backgroundGradientTo: '#FFFFFF',
+              backgroundColor: colors.card,
+              backgroundGradientFrom: colors.card,
+              backgroundGradientTo: colors.card,
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(59, 130, 246, ${opacity})`,
-              labelColor: () => '#6B7280',
+              labelColor: () => colors.textSecondary,
               barPercentage: 0.6,
               propsForBackgroundLines: {
                 stroke: '#F1F5F9',
@@ -334,14 +340,14 @@ export default function InsightsScreen() {
 
         {/* Category Breakdown Pie */}
         <Text style={styles.sectionTitle}>Category Breakdown</Text>
-        <View style={styles.chartCard}>
+        <View style={[styles.chartCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <View style={styles.pieWrapper}>
             {/* @ts-ignore */}
             <PieChart
               widthAndHeight={180}
               series={pieSeries}
               coverRadius={0.65}
-              coverFill={'#FFFFFF'}
+              coverFill={colors.card}
             />
           </View>
 
@@ -350,7 +356,7 @@ export default function InsightsScreen() {
               {categoryData.map((item) => (
                 <View key={item.name} style={styles.legendItem}>
                   <View style={[styles.legendDot, { backgroundColor: item.color }]} />
-                  <Text style={styles.legendText}>
+                  <Text style={[styles.legendText, { color: colors.text }]}>
                     {item.name}: {item.count}
                   </Text>
                 </View>

@@ -6,18 +6,23 @@
  * Designing the targets management screen with add/delete functionality.
  * Dynamic colour logic for progress bars based on target completion.
  * Layout for target cards showing progress, remaining count, and met/unmet badges.
+ * Implementing dark mode colours using ThemeContext.
  *
  * Adapted from:
- * IS4447 Lab workspace - base project structure, Drizzle ORM with SQLite.
- * react-native-progress npm package for progress bars.
- * icons.expo.fyi (2026) MaterialCommunityIcons.
+ * IS4447 Lab workspace - base project structure, Drizzle ORM with SQLite — https://orm.drizzle.team/docs/select
+ * react-native-progress npm package for progress bars — https://www.npmjs.com/package/react-native-progress
+ * icons.expo.fyi (2026) MaterialCommunityIcons — https://icons.expo.fyi
  * Progress bar colour pattern adapted from own FYP project (EatBud).
+ * React Context API for theme — https://react.dev/reference/react/createContext
  *
  * AI assistance (Claude, Anthropic, 2026):
  * Assisted with building the targets screen structure including
  * Drizzle ORM queries for calculating completed logs within weekly
  * and monthly date ranges, progress calculation against target values,
  * and form for creating new targets.
+ * Dark mode integration with ThemeContext implemented by myself.
+ *
+ *
  *
  * I understand and can explain all code in this file.
  */
@@ -25,6 +30,7 @@
 import FormField from '@/components/ui/form-field';
 import PrimaryButton from '@/components/ui/primary-button';
 import ScreenHeader from '@/components/ui/screen-header';
+import { useTheme } from '@/context/ThemeContext';
 import { db } from '@/db/client';
 import { habitLogs as habitLogsTable, targets as targetsTable } from '@/db/schema';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -35,7 +41,6 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-nati
 import * as Progress from 'react-native-progress';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppContext, Category, Habit } from '../_layout';
-
 
 type Target = {
   id: number;
@@ -50,6 +55,7 @@ export default function TargetsScreen() {
   const context = useContext(AppContext);
   const [targetsList, setTargetsList] = useState<Target[]>([]);
   const [logCounts, setLogCounts] = useState<Record<string, number>>({});
+  const { colors } = useTheme();
 
   // Form state
   const [selectedHabitId, setSelectedHabitId] = useState<number | null>(null);
@@ -157,17 +163,17 @@ export default function TargetsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <ScreenHeader title="Targets" subtitle="Track your goals" />
 
         {!showForm ? (
           <PrimaryButton label="Add Target" onPress={() => setShowForm(true)} />
         ) : (
-          <View style={styles.formCard}>
-            <Text style={styles.formTitle}>New Target</Text>
+          <View style={[styles.formCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.formTitle, { color: colors.text }]}>New Target</Text>
 
-            <Text style={styles.sectionLabel}>Habit (optional - leave blank for all habits)</Text>
+            <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>Habit (optional - leave blank for all habits)</Text>
             <View style={styles.optionRow}>
               <Pressable
                 accessibilityLabel="Target applies to all habits"
@@ -236,7 +242,7 @@ export default function TargetsScreen() {
               const isMet = current >= target.targetValue;
 
               return (
-                <View key={target.id} style={[styles.targetCard, isMet && styles.targetCardMet]}>
+                <View key={target.id} style={[styles.targetCard, { backgroundColor: colors.card, borderColor: colors.border }, isMet && styles.targetCardMet]}>
                   <View style={styles.targetHeader}>
                     <View style={[styles.iconBox, { backgroundColor: (category?.color ?? '#6B7280') + '20' }]}>
                       <MaterialCommunityIcons
@@ -246,10 +252,10 @@ export default function TargetsScreen() {
                       />
                     </View>
                     <View style={styles.targetInfo}>
-                      <Text style={styles.targetName}>
+                      <Text style={[styles.targetName, { color: colors.text }]}>
                         {habit ? habit.name : 'All Habits'}
                       </Text>
-                      <Text style={styles.targetPeriod}>
+                      <Text style={[styles.targetPeriod, { color: colors.textSecondary }]}>
                         {target.targetValue}x {target.period}
                       </Text>
                     </View>
@@ -278,7 +284,7 @@ export default function TargetsScreen() {
                       unfilledColor="#E5E7EB"
                       borderWidth={0}
                     />
-                    <Text style={styles.progressText}>{current} / {target.targetValue}</Text>
+                    <Text style={[styles.progressText, { color: colors.textSecondary }]}>{current} / {target.targetValue}</Text>
                   </View>
 
                   <Pressable

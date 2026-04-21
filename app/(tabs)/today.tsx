@@ -6,26 +6,29 @@
  * Designing the daily habit check-off interface with toggle and counter controls.
  * Dynamic colour logic for progress bar based on completion rate.
  * Layout and styling for habit cards with completed/uncompleted states.
+ * Implementing dark mode colours using ThemeContext.
  *
  * Adapted from:
- * IS4447 Lab workspace - base project structure, Drizzle ORM with SQLite.
- * react-native-progress npm package for progress bars.
- * icons.expo.fyi (2026) MaterialCommunityIcons.
+ * IS4447 Lab workspace - base project structure, Drizzle ORM with SQLite — https://orm.drizzle.team/docs/select
+ * react-native-progress npm package for progress bars — https://www.npmjs.com/package/react-native-progress
+ * icons.expo.fyi (2026) MaterialCommunityIcons — https://icons.expo.fyi
  * Progress bar colour pattern adapted from own FYP project (EatBud).
+ * React Context API for theme — https://react.dev/reference/react/createContext
+ * ZenQuotes API for motivational quotes — https://zenquotes.io
  *
  * AI assistance (Claude, Anthropic, 2026):
  * Assisted with building the daily logging screen structure including
  * toggle and count-based habit logging, Drizzle ORM queries for
  * inserting and updating habit logs by date, and overall daily
  * progress calculation.
- * 
+ * Dark mode integration with ThemeContext implemented by myself.
  *
- * 
  *
  * I understand and can explain all code in this file.
  */
 
 import ScreenHeader from '@/components/ui/screen-header';
+import { useTheme } from '@/context/ThemeContext';
 import { db } from '@/db/client';
 import { habitLogs as habitLogsTable } from '@/db/schema';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -50,6 +53,7 @@ export default function TodayScreen() {
   const context = useContext(AppContext);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const today = new Date().toISOString().split('T')[0];
+  const { colors } = useTheme();
 
   useFocusEffect(
     useCallback(() => {
@@ -122,12 +126,12 @@ export default function TodayScreen() {
   const overallProgress = habits.length > 0 ? completedCount / habits.length : 0;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.content}>
         <ScreenHeader title="Today" subtitle={today} />
 
-        <View style={styles.summaryCard}>
-          <Text style={styles.summaryText}>
+        <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <Text style={[styles.summaryText, { color: colors.text }]}>
             {completedCount} of {habits.length} habits completed
           </Text>
           <Progress.Bar
@@ -147,7 +151,7 @@ export default function TodayScreen() {
         </View>
 
         {habits.length === 0 ? (
-          <Text style={styles.emptyText}>No habits yet. Add one from the Habits tab.</Text>
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No habits yet. Add one from the Habits tab.</Text>
         ) : (
           habits.map((habit: Habit) => {
             const category = categories.find((c: Category) => c.id === habit.categoryId);
@@ -160,7 +164,7 @@ export default function TodayScreen() {
               : isCompleted ? 1 : 0;
 
             return (
-              <View key={habit.id} style={[styles.habitCard, isCompleted && styles.habitCardCompleted]}>
+              <View key={habit.id} style={[styles.habitCard, { backgroundColor: colors.card, borderColor: colors.border }, isCompleted && styles.habitCardCompleted]}>
                 <View style={styles.habitHeader}>
                   <View style={[styles.iconBox, { backgroundColor: (category?.color ?? '#94A3B8') + '20' }]}>
                     <MaterialCommunityIcons
@@ -170,10 +174,10 @@ export default function TodayScreen() {
                     />
                   </View>
                   <View style={styles.habitInfo}>
-                    <Text style={[styles.habitName, isCompleted && styles.habitNameCompleted]}>
+                    <Text style={[styles.habitName, { color: colors.text }, isCompleted && styles.habitNameCompleted]}>
                       {habit.name}
                     </Text>
-                    <Text style={styles.habitGoal}>
+                    <Text style={[styles.habitGoal, { color: colors.textSecondary }]}>
                       {isCountBased ? `${currentCount} / ${habit.goalCount}` : isCompleted ? 'Done' : 'Not done'}
                     </Text>
                   </View>

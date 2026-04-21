@@ -1,3 +1,4 @@
+import { useTheme } from '@/context/ThemeContext';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 type Props = {
@@ -13,6 +14,8 @@ export default function PrimaryButton({
   compact = false,
   variant = 'primary',
 }: Props) {
+  const { colors, dark } = useTheme();
+
   return (
     <Pressable
       accessibilityLabel={label}
@@ -20,8 +23,13 @@ export default function PrimaryButton({
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        variant === 'secondary' ? styles.secondary : null,
-        variant === 'danger' ? styles.danger : null,
+        variant === 'primary' && { backgroundColor: colors.primary },
+        variant === 'secondary' && {
+          backgroundColor: dark ? colors.card : '#FFFFFF',
+          borderColor: dark ? colors.border : '#92bdf2',
+          borderWidth: 1,
+        },
+        variant === 'danger' && styles.danger,
         compact ? styles.compact : null,
         pressed ? styles.pressed : null,
       ]}
@@ -29,7 +37,7 @@ export default function PrimaryButton({
       <Text
         style={[
           styles.label,
-          variant === 'secondary' ? styles.secondaryLabel : null,
+          variant === 'secondary' && { color: colors.text },
           compact ? styles.compactLabel : null,
         ]}
       >
@@ -42,15 +50,9 @@ export default function PrimaryButton({
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#0F766E',
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 11,
-  },
-  secondary: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#92bdf2',
-    borderWidth: 1,
   },
   danger: {
     backgroundColor: '#B91C1C',
@@ -70,9 +72,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '600',
-  },
-  secondaryLabel: {
-    color: '#0F172A',
   },
   compactLabel: {
     fontSize: 13,

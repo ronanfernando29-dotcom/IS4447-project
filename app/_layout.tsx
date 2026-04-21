@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/context/ThemeContext';
 import { db } from '@/db/client';
 import { categories as categoriesTable, habits as habitsTable } from '@/db/schema';
 import { seedDatabase } from '@/db/seed';
@@ -53,8 +54,10 @@ export default function RootLayout() {
   }, [userId]);
 
   return (
-    <AppContext.Provider value={{ habits, setHabits, categories, setCategories, userId, setUserId }}>
-      <Stack />
-    </AppContext.Provider>
+    <ThemeProvider>
+      <AppContext.Provider value={{ habits, setHabits, categories, setCategories, userId, setUserId }}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </AppContext.Provider>
+    </ThemeProvider>
   );
 }

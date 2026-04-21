@@ -1,5 +1,6 @@
 import { AppContext, Category, Habit } from '@/app/_layout';
 import InfoTag from '@/components/ui/info-tag';
+import { useTheme } from '@/context/ThemeContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useContext } from 'react';
@@ -12,6 +13,7 @@ type Props = {
 export default function HabitCard({ habit }: Props) {
   const router = useRouter();
   const context = useContext(AppContext);
+  const { colors } = useTheme();
 
   const category = context?.categories.find(
     (c: Category) => c.id === habit.categoryId
@@ -32,6 +34,7 @@ export default function HabitCard({ habit }: Props) {
       onPress={openDetails}
       style={({ pressed }) => [
         styles.card,
+        { backgroundColor: colors.card, borderColor: colors.border },
         pressed ? styles.cardPressed : null,
       ]}
     >
@@ -44,9 +47,9 @@ export default function HabitCard({ habit }: Props) {
           />
         </View>
         <View style={styles.headerText}>
-          <Text style={styles.name}>{habit.name}</Text>
+          <Text style={[styles.name, { color: colors.text }]}>{habit.name}</Text>
           {habit.notes ? (
-            <Text style={styles.notes} numberOfLines={1}>{habit.notes}</Text>
+            <Text style={[styles.notes, { color: colors.textSecondary }]} numberOfLines={1}>{habit.notes}</Text>
           ) : null}
         </View>
       </View>
@@ -61,8 +64,6 @@ export default function HabitCard({ habit }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#E5E7EB',
     borderRadius: 14,
     borderWidth: 1,
     marginBottom: 12,
@@ -87,12 +88,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   name: {
-    color: '#111827',
     fontSize: 18,
     fontWeight: '700',
   },
   notes: {
-    color: '#6B7280',
     fontSize: 13,
     marginTop: 2,
   },

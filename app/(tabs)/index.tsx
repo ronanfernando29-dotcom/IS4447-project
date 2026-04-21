@@ -4,24 +4,27 @@
  *
  * What's original (own work):
  * Adapting the student list screen from IS4447 lab workspace into a habits list.
- * Converting the student list screen to a habits list,
+ * Converting the student list screen to a habits list.
  * Search and category filter logic for habits.
  * Layout and styling decisions for the main habits screen.
+ * Implementing dark mode toggle using ThemeContext.
  *
  * Adapted from:
  * IS4447 Lab workspace - original student list screen structure with search
  * and filter functionality, adapted for habits.
  * PrimaryButton, ScreenHeader, HabitCard components.
- * Drizzle ORM with SQLite for data persistence.
- * expo-drizzle-studio-plugin for database debugging.
+ * Drizzle ORM with SQLite for data persistence — https://orm.drizzle.team/docs/select
+ * expo-drizzle-studio-plugin for database debugging — https://www.npmjs.com/package/expo-drizzle-studio-plugin
+ * React Context API for theme — https://react.dev/reference/react/createContext
+ * icons.expo.fyi (2026) MaterialCommunityIcons — https://icons.expo.fyi
  *
  * AI assistance (Claude, Anthropic, 2026):
  * Assisted with converting the student list screen to a habits list,
  * updating context from StudentContext to AppContext, and adding
  * category-based filtering alongside existing text search.
- * 
+ * Dark mode integration with ThemeContext implemented by myself.
  *
- * Link to AI conversation: [paste link]
+ * 
  *
  * I understand and can explain all code in this file.
  */
@@ -29,7 +32,9 @@
 import HabitCard from '@/components/HabitCard';
 import PrimaryButton from '@/components/ui/primary-button';
 import ScreenHeader from '@/components/ui/screen-header';
+import { useTheme } from '@/context/ThemeContext';
 import { sqlite } from '@/db/client';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
@@ -50,6 +55,7 @@ export default function IndexScreen() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const { colors, dark, toggleTheme } = useTheme();
 
   useDrizzleStudio(sqlite);
 
@@ -81,11 +87,37 @@ export default function IndexScreen() {
   });
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScreenHeader
-        title="My Habits"
-        subtitle={`${habits.length} habit${habits.length !== 1 ? 's' : ''} tracked`}
-      />
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <View style={styles.headerRow}>
+        <View style={{ flex: 1 }}>
+          <ScreenHeader
+            title="My Habits"
+            subtitle={`${habits.length} habit${habits.length !== 1 ? 's' : ''} tracked`}
+          />
+        </View>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <Pressable
+            accessibilityLabel="Profile"
+            accessibilityRole="button"
+            onPress={() => router.push({ pathname: '../profile' })}
+            style={[styles.themeToggle, { backgroundColor: colors.card, borderColor: colors.border }]}
+          >
+            <MaterialCommunityIcons name="account-circle-outline" size={22} color={colors.text} />
+          </Pressable>
+          <Pressable
+            accessibilityLabel={`Switch to ${dark ? 'light' : 'dark'} mode`}
+            accessibilityRole="button"
+            onPress={toggleTheme}
+            style={[styles.themeToggle, { backgroundColor: colors.card, borderColor: colors.border }]}
+          >
+            <MaterialCommunityIcons
+              name={dark ? 'weather-sunny' : 'weather-night'}
+              size={22}
+              color={colors.text}
+            />
+          </Pressable>
+        </View>
+      </View>
 
       <PrimaryButton
         label="Add Habit"
@@ -98,13 +130,25 @@ export default function IndexScreen() {
           onPress={() => router.push({ pathname: '../categories' })}
         />
       </View>
+      <View style={{ marginTop: 10 }}>
+        <PrimaryButton
+          label="Export Data"
+          variant="secondary"
+          onPress={() => router.push({ pathname: '../export' })}
+        />
+      </View>
 
       <TextInput
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Search habits..."
+        placeholderTextColor={colors.textSecondary}
         accessibilityLabel="Search habits"
-        style={styles.searchInput}
+        style={[styles.searchInput, {
+          backgroundColor: colors.inputBg,
+          borderColor: colors.inputBorder,
+          color: colors.text,
+        }]}
       />
 
       <View style={styles.filterRow}>
@@ -119,13 +163,15 @@ export default function IndexScreen() {
               onPress={() => setSelectedCategory(cat)}
               style={[
                 styles.filterButton,
-                isSelected && styles.filterButtonSelected,
+                { backgroundColor: colors.filterBg, borderColor: colors.filterBorder },
+                isSelected && { backgroundColor: colors.filterSelectedBg, borderColor: colors.filterSelectedBg },
               ]}
             >
               <Text
                 style={[
                   styles.filterButtonText,
-                  isSelected && styles.filterButtonTextSelected,
+                  { color: colors.text },
+                  isSelected && { color: colors.filterSelectedText },
                 ]}
               >
                 {cat}
@@ -137,7 +183,7 @@ export default function IndexScreen() {
 
       <ScrollView contentContainerStyle={styles.listContent}>
         {filteredHabits.length === 0 ? (
-          <Text style={styles.emptyText}>
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
             No habits match your filters
           </Text>
         ) : (
@@ -151,6 +197,20 @@ export default function IndexScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  themeToggle: {
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 1,
+    height: 40,
+    justifyContent: 'center',
+    marginTop: 4,
+    width: 40,
+  },
   safeArea: {
     backgroundColor: '#F8FAFC',
     flex: 1,
