@@ -29,17 +29,24 @@ export default function QuoteCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const API_KEY = process.env.EXPO_PUBLIC_API_NINJAS_KEY;
+  console.log('API KEY:', API_KEY);
+
   const fetchQuote = useCallback(async () => {
     setLoading(true);
     setError(false);
     try {
-      const response = await fetch('https://dummyjson.com/quotes/random');
+      const response = await fetch('https://api.api-ninjas.com/v1/quotes', {
+        headers: { 'X-Api-Key': API_KEY || '' },
+      });
       const data = await response.json();
-      if (data && data.quote) {
-        setQuote(data.quote);
-        setAuthor(data.author);
+      console.log('Quote response:', JSON.stringify(data));
+      if (data && data[0]) {
+        setQuote(data[0].quote);
+        setAuthor(data[0].author);
       }
     } catch (e) {
+      console.log('Quote error:', e);
       setError(true);
       setQuote('The secret of getting ahead is getting started.');
       setAuthor('Mark Twain');
