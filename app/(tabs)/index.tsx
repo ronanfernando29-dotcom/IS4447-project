@@ -36,7 +36,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { sqlite } from '@/db/client';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import {
   Pressable,
@@ -59,7 +59,14 @@ export default function IndexScreen() {
 
   useDrizzleStudio(sqlite);
 
+
+  
   if (!context) return null;
+
+  if (!context.userId) {
+    return <Redirect href="/login" />;
+  }
+
 
   const { habits, categories } = context;
 

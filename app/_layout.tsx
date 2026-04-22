@@ -39,24 +39,44 @@ export const AppContext = createContext<AppContextType | null>(null);
 export default function RootLayout() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [userId, setUserId] = useState<number | null>(1);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const init = async () => {
       await seedDatabase();
-      if (!userId) return;
+      setReady(true);
+    };
+    void init();
+  }, []);
+
+  useEffect(() => {
+    if (!userId) {
+      setHabits([]);
+      setCategories([]);
+      return;
+    }
+    const load = async () => {
       const habitRows = await db.select().from(habitsTable).where(eq(habitsTable.userId, userId));
       setHabits(habitRows);
       const catRows = await db.select().from(categoriesTable).where(eq(categoriesTable.userId, userId));
       setCategories(catRows);
     };
-    void init();
+    void load();
   }, [userId]);
+
+  if (!ready) return null;
 
   return (
     <ThemeProvider>
       <AppContext.Provider value={{ habits, setHabits, categories, setCategories, userId, setUserId }}>
-        <Stack screenOptions={{ headerShown: false }} />
+        <Stack screenOptions={{ headerShown: false }} initialRouteName={userId ? '(tabs)' : 'login'}>
+          <Stack.Screen name="login" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="add" options={{ headerShown: true, title: 'Add Habit' }} />
+          <Stack.Screen name="categories" options={{ headerShown: true, title: 'Categories' }} />
+          <Stack.Screen name="profile" options={{ headerShown: true, title: 'Profile' }} />
+        </Stack>
       </AppContext.Provider>
     </ThemeProvider>
   );
