@@ -27,6 +27,7 @@
  * I understand and can explain all code in this file.
  */
 
+import NotificationSetup from '@/components/Notificationreminders';
 import QuoteCard from '@/components/QuoteCard';
 import ScreenHeader from '@/components/ui/screen-header';
 import { useTheme } from '@/context/ThemeContext';
@@ -131,6 +132,7 @@ export default function TodayScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <ScreenHeader title="Today" subtitle={today} />
         <QuoteCard />
+        <NotificationSetup />
 
         <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Text style={[styles.summaryText, { color: colors.text }]}>

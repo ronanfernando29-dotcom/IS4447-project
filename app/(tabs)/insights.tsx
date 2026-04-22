@@ -275,11 +275,11 @@ export default function InsightsScreen() {
                     { value: 1, color: '#E5E7EB' },
                   ]
               }
-              coverRadius={0.7}
-              coverFill={'#FFFFFF'}
+              coverRadius={0.6}
+              coverFill={colors.card}
             />
             <View style={styles.pieCenter}>
-              <Text style={[styles.piePercentage, { color: feedbackColor }]}>
+              <Text style={[styles.piePercentage, { color: colors.text }]}>
                 {Math.round(completionRate * 100)}%
               </Text>
               <Text style={styles.pieLabel}>completed</Text>
@@ -442,6 +442,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
+    backgroundColor: 'transparent',
+    zIndex: 10,
   },
   piePercentage: {
     fontSize: 28,

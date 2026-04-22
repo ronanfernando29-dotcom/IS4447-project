@@ -49,12 +49,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppContext, Category, Habit } from '../_layout';
 
+
 export default function IndexScreen() {
   const router = useRouter();
   const context = useContext(AppContext);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [dateFilter, setDateFilter] = useState('All Time');
   const { colors, dark, toggleTheme } = useTheme();
 
   useDrizzleStudio(sqlite);
@@ -77,6 +79,23 @@ export default function IndexScreen() {
     ...categories.map((c: Category) => c.name),
   ];
 
+  const getDateRangeStart = (): string | null => {
+    const now = new Date();
+    if (dateFilter === 'Last 7 Days') {
+      const weekAgo = new Date(now);
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      return weekAgo.toISOString().split('T')[0];
+    }
+    if (dateFilter === 'Last 30 Days') {
+      const monthAgo = new Date(now);
+      monthAgo.setDate(monthAgo.getDate() - 30);
+      return monthAgo.toISOString().split('T')[0];
+    }
+    return null;
+  };
+
+  const dateRangeStart = getDateRangeStart();
+
   const filteredHabits = habits.filter((habit: Habit) => {
     const category = categories.find((c: Category) => c.id === habit.categoryId);
 
@@ -90,7 +109,11 @@ export default function IndexScreen() {
       selectedCategory === 'All' ||
       category?.name === selectedCategory;
 
-    return matchesSearch && matchesCategory;
+    const matchesDate =
+      !dateRangeStart ||
+      habit.createdAt.split('T')[0] >= dateRangeStart;
+
+    return matchesSearch && matchesCategory && matchesDate;
   });
 
   return (
@@ -175,6 +198,36 @@ export default function IndexScreen() {
                 ]}
               >
                 {cat}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+
+      <View style={styles.filterRow}>
+        {['All Time', 'Last 7 Days', 'Last 30 Days'].map((option) => {
+          const isSelected = dateFilter === option;
+
+          return (
+            <Pressable
+              key={option}
+              accessibilityLabel={`Filter by ${option}`}
+              accessibilityRole="button"
+              onPress={() => setDateFilter(option)}
+              style={[
+                styles.filterButton,
+                { backgroundColor: colors.filterBg, borderColor: colors.filterBorder },
+                isSelected && { backgroundColor: colors.primary, borderColor: colors.primary },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.filterButtonText,
+                  { color: colors.text },
+                  isSelected && { color: '#FFFFFF' },
+                ]}
+              >
+                {option}
               </Text>
             </Pressable>
           );

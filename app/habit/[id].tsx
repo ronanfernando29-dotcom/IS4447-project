@@ -76,6 +76,14 @@ export default function HabitDetail() {
           onPress={deleteHabit}
         />
       </View>
+
+      <View style={styles.buttonSpacing}>
+        <PrimaryButton
+          label="Back"
+          variant="secondary"
+          onPress={() => router.back()}
+        />
+      </View>
     </SafeAreaView>
   );
 }

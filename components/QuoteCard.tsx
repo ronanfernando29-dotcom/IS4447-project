@@ -6,7 +6,8 @@
  * Quote card layout and styling.
  *
  * Adapted from:
- * DummyJSON Quotes API (https://dummyjson.com/docs/quotes) for motivational quotes.
+ * API Ninjas Quotes API (https://api-ninjas.com/api/quotes) for motivational quotes.
+ * API key stored in .env file using EXPO_PUBLIC_ prefix — https://docs.expo.dev/guides/environment-variables/
  *
  * AI assistance (Claude, Anthropic, 2026):
  * Assisted with fetch logic, error handling, and loading states

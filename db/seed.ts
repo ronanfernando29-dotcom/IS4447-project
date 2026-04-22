@@ -16,15 +16,16 @@ export async function seedDatabase() {
     { userId: 1, name: 'Fitness', color: '#3B82F6', icon: 'run' },
     { userId: 1, name: 'Productivity', color: '#F59E0B', icon: 'book-open-variant' },
     { userId: 1, name: 'Wellness', color: '#8B5CF6', icon: 'meditation' },
+    { userId: 1, name: 'Strength Fitness', color: '#F97316', icon: 'dumbbell' },
   ]);
 
   // mock habits
   await db.insert(habits).values([
-    { userId: 1, categoryId: 1, name: 'Drink Water', frequency: 'daily', goalCount: 8, notes: '8 glasses per day', createdAt: new Date().toISOString() },
-    { userId: 1, categoryId: 2, name: 'Go Running', frequency: 'daily', goalCount: 1, notes: 'At least 30 minutes', createdAt: new Date().toISOString() },
-    { userId: 1, categoryId: 3, name: 'Read a Book', frequency: 'daily', goalCount: 1, notes: 'Read for 30 minutes', createdAt: new Date().toISOString() },
-    { userId: 1, categoryId: 4, name: 'Meditate', frequency: 'daily', goalCount: 1, notes: '10 minutes of mindfulness', createdAt: new Date().toISOString() },
-    { userId: 1, categoryId: 2, name: 'Workout', frequency: 'daily', goalCount: 1, notes: 'Gym or home workout', createdAt: new Date().toISOString() },
+    { userId: 1, categoryId: 1, name: 'Drink Water', frequency: 'daily', goalCount: 8, notes: '8 glasses per day', createdAt: '2026-03-01T00:00:00.000Z' },
+    { userId: 1, categoryId: 2, name: 'Go Running', frequency: 'daily', goalCount: 1, notes: 'At least 30 minutes', createdAt: '2026-03-15T00:00:00.000Z' },
+    { userId: 1, categoryId: 3, name: 'Read a Book', frequency: 'daily', goalCount: 1, notes: 'Read for 30 minutes', createdAt: '2026-04-01T00:00:00.000Z' },
+    { userId: 1, categoryId: 4, name: 'Meditate', frequency: 'daily', goalCount: 1, notes: '10 minutes of mindfulness', createdAt: '2026-04-20T00:00:00.000Z' },
+    { userId: 1, categoryId: 5, name: 'Workout', frequency: 'daily', goalCount: 1, notes: 'Gym or home workout', createdAt: new Date().toISOString() },
   ]);
 
   // Create habit logs for the past 14 days
