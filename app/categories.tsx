@@ -20,7 +20,6 @@
  * delete confirmation alert, and Drizzle ORM queries for CRUD operations.
  * 
  *
- * Link to AI conversation: [paste link]
  *
  * I understand and can explain all code in this file.
  */

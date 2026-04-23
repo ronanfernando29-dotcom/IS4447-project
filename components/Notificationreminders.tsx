@@ -99,7 +99,7 @@ export default function NotificationSetup() {
     });
     
     setEnabled(true);
-    Alert.alert('Reminders Set', 'You will get daily reminders at 9 AM and 8 PM.');
+    Alert.alert('Reminders Set', 'You will get daily reminders at 9AM and 8PM');
   };
 
   const disableReminders = async () => {

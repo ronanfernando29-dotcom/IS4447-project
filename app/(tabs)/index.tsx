@@ -31,7 +31,6 @@
 
 import HabitCard from '@/components/HabitCard';
 import PrimaryButton from '@/components/ui/primary-button';
-import ScreenHeader from '@/components/ui/screen-header';
 import { useTheme } from '@/context/ThemeContext';
 import { sqlite } from '@/db/client';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -39,6 +38,7 @@ import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import { Redirect, useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import {
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -119,11 +119,18 @@ export default function IndexScreen() {
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <View style={styles.headerRow}>
-        <View style={{ flex: 1 }}>
-          <ScreenHeader
-            title="My Habits"
-            subtitle={`${habits.length} habit${habits.length !== 1 ? 's' : ''} tracked`}
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <Image
+            source={require('@/assets/images/Hab.png')}
+            style={styles.logo}
+            accessibilityLabel="HabitBud logo"
           />
+          <View>
+            <Text style={[styles.appTitle, { color: colors.primary }]}>HabitBud</Text>
+            <Text style={[styles.appSubtitle, { color: colors.textSecondary }]}>
+              {habits.length} habit{habits.length !== 1 ? 's' : ''} tracked
+            </Text>
+          </View>
         </View>
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <Pressable
@@ -263,6 +270,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 4,
     width: 40,
+  },
+  logo: {
+    height: 40,
+    resizeMode: 'contain',
+    width: 40,
+    borderRadius: 10,
+  },
+  appTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+  },
+  appSubtitle: {
+    fontSize: 13,
+    marginTop: 2,
   },
   safeArea: {
     backgroundColor: '#F8FAFC',

@@ -13,7 +13,6 @@
  * Assisted with building profile screen with logout, delete account
  * with cascade delete of user data, and navigation back to login.
  *
- * Link to AI conversation: [paste link]
  *
  * I understand and can explain all code in this file.
  */
@@ -23,11 +22,11 @@ import ScreenHeader from '@/components/ui/screen-header';
 import { useTheme } from '@/context/ThemeContext';
 import { db } from '@/db/client';
 import {
-    categories as categoriesTable,
-    habitLogs as habitLogsTable,
-    habits as habitsTable,
-    targets as targetsTable,
-    users as usersTable,
+  categories as categoriesTable,
+  habitLogs as habitLogsTable,
+  habits as habitsTable,
+  targets as targetsTable,
+  users as usersTable,
 } from '@/db/schema';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { eq } from 'drizzle-orm';

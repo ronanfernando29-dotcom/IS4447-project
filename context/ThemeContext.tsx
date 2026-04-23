@@ -31,12 +31,12 @@ type ThemeContextType = {
 };
 
 const lightColors = {
-  background: '#F8FAFC',
+  background: '#FFFFFF',
   card: '#FFFFFF',
   text: '#111827',
   textSecondary: '#6B7280',
   border: '#E5E7EB',
-  primary: '#0F766E',
+  primary: '#5f90a7',
   inputBg: '#FFFFFF',
   inputBorder: '#CBD5E1',
   filterBg: '#FFFFFF',
@@ -53,7 +53,7 @@ const darkColors = {
   text: '#F1F5F9',
   textSecondary: '#94A3B8',
   border: '#334155',
-  primary: '#14B8A6',
+  primary: '#b580fa',
   inputBg: '#1E293B',
   inputBorder: '#475569',
   filterBg: '#1E293B',

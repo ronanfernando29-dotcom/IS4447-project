@@ -28,7 +28,7 @@ const mockCategory = {
   userId: 1,
   name: 'Health',
   color: '#10B981',
-  icon: '💪',
+  icon: 'heart-pulse',
 };
 
 const mockHabit = {

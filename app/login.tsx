@@ -128,6 +128,7 @@ export default function LoginScreen() {
             value={password}
             onChangeText={setPassword}
             placeholder="Enter password"
+            secureTextEntry
           />
         </View>
 
@@ -185,7 +186,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 120,
     marginBottom: 12,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     width: 120,
+    borderRadius: 60,
   },
 });

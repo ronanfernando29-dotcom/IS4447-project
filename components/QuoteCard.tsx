@@ -49,8 +49,8 @@ export default function QuoteCard() {
     } catch (e) {
       console.log('Quote error:', e);
       setError(true);
-      setQuote('The secret of getting ahead is getting started.');
-      setAuthor('Mark Twain');
+      setQuote("It's not what we do once in a while that shapes our lives. It's what we do consistently.");
+      setAuthor('Anthony Robbins');
     } finally {
       setLoading(false);
     }
